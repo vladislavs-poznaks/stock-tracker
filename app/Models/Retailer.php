@@ -10,20 +10,19 @@ use Illuminate\Database\Eloquent\Model;
  * Class Product
  * @mixin Eloquent
  */
-class Product extends Model
+class Retailer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name'
+    ];
 
-    public function track()
+    public function addStock(Product $product, Stock $stock)
     {
-        $this->stock->each->track();
-    }
+        $stock->product_id = $product->id;
 
-    public function inStock(): bool
-    {
-        return $this->stock()->where('available', true)->exists();
+        $this->stock()->save($stock);
     }
 
     public function stock()
