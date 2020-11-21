@@ -33,7 +33,7 @@ class BestBuyTest extends TestCase
         } catch (Exception $e) {
             $this->fail('Failed to track Best Buy API. ' . $e->getMessage());
         }
-    
+
         $this->assertTrue(true);
     }
 
