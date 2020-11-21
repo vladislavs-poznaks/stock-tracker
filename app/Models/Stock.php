@@ -2,10 +2,20 @@
 
 namespace App\Models;
 
+use App\Clients\BestBuy;
+use App\Clients\ClientException;
+use Facades\App\Clients\ClientFactory;
+use Eloquent;
+use Exception;
 use Http;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
+/**
+ * Class Product
+ * @mixin Eloquent
+ */
 class Stock extends Model
 {
     use HasFactory;
@@ -25,14 +35,14 @@ class Stock extends Model
 
     public function track()
     {
-        if ($this->retailer->name === 'Best Buy') {
-            $response = Http::get('http://foo.bar')->json();
+        $status = $this->retailer
+            ->client()
+            ->checkAvailability($this);
 
-            $this->update([
-                'available' => $response['available'],
-                'price' => $response['price']
-            ]);
-        }
+        $this->update([
+            'available' => $status->available,
+            'price' => $status->price
+        ]);
     }
 
     public function retailer()
