@@ -18,9 +18,7 @@ class Product extends Model
 
     public function track()
     {
-        $this->stock->each->track(
-            fn($stock) => $this->recordHistory($stock)
-        );
+        $this->stock->each->track();
     }
 
     public function inStock(): bool
@@ -36,14 +34,5 @@ class Product extends Model
     public function history()
     {
         return $this->hasMany(History::class);
-    }
-
-    public function recordHistory(Stock $stock): void
-    {
-        $this->history()->create([
-            'stock_id' => $stock->id,
-            'price' => $stock->price,
-            'available' => $stock->available
-        ]);
     }
 }

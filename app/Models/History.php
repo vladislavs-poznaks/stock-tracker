@@ -18,6 +18,7 @@ class History extends Model
 
     protected $fillable = [
         'stock_id',
+        'product_id',
         'price',
         'available'
     ];
