@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Clients\BestBuy;
 use App\Clients\ClientException;
+use App\Events\NowAvailable;
 use Facades\App\Clients\ClientFactory;
 use Eloquent;
 use Exception;
@@ -38,6 +39,10 @@ class Stock extends Model
         $status = $this->retailer
             ->client()
             ->checkAvailability($this);
+
+        if (! $this->available && $status->available) {
+            event(new NowAvailable($this));
+        }
 
         $this->update([
             'available' => $status->available,

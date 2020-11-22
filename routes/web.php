@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Stock;
+use App\Models\User;
+use App\Notifications\ImportantStockUpdate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/mail-preview', function () {
+    return (new ImportantStockUpdate(Stock::first()))->toMail(User::factory()->create());
+});
 
 Route::get('/', function () {
     return view('welcome');
